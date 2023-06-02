@@ -3,7 +3,6 @@ import pygame
 #ADD FLIPPING MODEL
 #ADD ATTACKING WT SWORD
 
-
 class Player(pygame.sprite.Sprite):
     #Init Sprite  
     dash_timer = 10*30
@@ -38,10 +37,7 @@ class Player(pygame.sprite.Sprite):
     #Flip Character Model   
     """def flip(self):
         if t_f_list[key_input[pygame.K_a]]:"""
-            
-                    
-
-        
+              
     #Object Collision
     def collide(self):
         self.rect.x -= self.movex
