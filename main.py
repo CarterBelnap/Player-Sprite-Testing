@@ -9,7 +9,7 @@ WINDOW_HEIGHT = 500
 pygame.display.set_caption("Player Testing")
 window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pygame.HWSURFACE)
 player_group=pygame.sprite.Group()
-player_sprite = Player(100,100,40,45,'images.png')
+player_sprite = Player(100,100)
 player_group.add(player_sprite)
 
 def display():

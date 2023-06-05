@@ -6,12 +6,14 @@ import pygame
 class Player(pygame.sprite.Sprite):
     #Init Sprite  
     dash_timer = 10*30
-    def __init__(self,startX,startY,width,height,load_path):
+    direction = 1
+    def __init__(self,startX,startY):
         super().__init__()
-        img_load = pygame.image.load(load_path)
-        img_copy = img_load.copy()
-        img_flip = pygame.transform.flip(img_copy, True, False)
-        self.image = pygame.transform.scale(img_load , (width, height)).convert_alpha()
+        self.img_left = pygame.image.load("images (3).png")
+        self.img_left =  pygame.transform.scale(self.img_left , (30, 30)).convert_alpha()
+        self.img_right = pygame.image.load("images.png")
+        self.img_right = pygame.transform.scale(self.img_right , (30, 30)).convert_alpha()
+        self.image = self.img_left
         self.mask  = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(startX,startY))
     #Basic Movement
@@ -31,16 +33,31 @@ class Player(pygame.sprite.Sprite):
         if pygame.key.get_mods() & pygame.KMOD_SHIFT and (key_input[pygame.K_a] or key_input[pygame.K_d]) and self.dash_timer<0:
             self.movex *=15
             self.dash_timer = 10*30
+        
+        if key_input[pygame.K_a]:
+            self.direction = 2
+            self.image = self.img_right
+            self.mask  = pygame.mask.from_surface(self.image)
+            
+        if key_input[pygame.K_d]:
+            self.direction = 1
+            self.image = self.img_left
+            self.mask  = pygame.mask.from_surface(self.image)
             
         self.rect.y += self.movey
         self.rect.x += self.movex 
-    #Flip Character Model   
-    """def flip(self):
-        if t_f_list[key_input[pygame.K_a]]:"""
-              
+        
     #Object Collision
     def collide(self):
         self.rect.x -= self.movex
         self.rect.y -= self.movey
 
-    #def attack(self):
+    def attack(self):
+        self.img_left = pygame.image.load("images (3).png")
+        self.img_left =  pygame.transform.scale(self.img_left , (30, 30)).convert_alpha()
+        
+        self.img_right = pygame.image.load("images.png")
+        self.img_right = pygame.transform.scale(self.img_right , (30, 30)).convert_alpha()
+        self.image = self.img_left
+        self.mask  = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect(topleft=(startX,startY))
