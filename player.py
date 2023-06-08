@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite):
             self.dash_timer = 10*30
         
         if key_input[pygame.K_a]:
-            self.direction = 2
+            self.direction = -1
             self.image = self.img_right
             self.mask  = pygame.mask.from_surface(self.image)
             
@@ -54,23 +54,36 @@ class Player(pygame.sprite.Sprite):
         self.rect.y -= self.movey
 
 class Sword(pygame.sprite.Sprite):
-
+    timer=20
     def __init__(self,startX,startY,direction):
         super().__init__()
-        self.img_left = pygame.image.load("sword2.png")
-        self.img_left =  pygame.transform.scale(self.img_left , (30, 30)).convert_alpha()
-        self.img_right = pygame.image.load("sword.png")
-        self.img_right = pygame.transform.scale(self.img_right , (30, 30)).convert_alpha()
+        self.img_left = pygame.image.load("SwordL.png")
+        self.img_left =  pygame.transform.scale(self.img_left , (30, 10)).convert_alpha()
+        self.img_right = pygame.image.load("SwordR.png")
+        self.img_right = pygame.transform.scale(self.img_right , (30, 10)).convert_alpha()
         self.image = self.img_left
         self.mask  = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(startX,startY))
+        self.direction = direction
         
         if direction==1:
             self.image = self.img_right
             self.mask  = pygame.mask.from_surface(self.image)
-        if direction==2:
+        if direction==-1:
             self.image = self.img_left
             self.mask  = pygame.mask.from_surface(self.image)
             
-    def update(self,speed,location):
-        self.rect.x+=speed*location
+    def update(self):
+        self.timer-=1
+
+        if self.direction ==1:
+            speed = 1
+        else:
+            speed = -1
+
+        if self.timer<=10:
+            speed = -speed
+        
+        self.rect.x+=2*speed
+        if self.timer==0:
+            self.kill()

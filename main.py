@@ -16,17 +16,14 @@ player_group.add(player_sprite)
 
 def attack(): 
     if event.type==pygame.MOUSEBUTTONDOWN and event.button==1:
-        sword_sprite = Sword(player_sprite.rect.x,player_sprite.rect.y,player_sprite.direction)
+        sword_sprite = Sword(player_sprite.rect.x+player_sprite.direction*15,player_sprite.rect.y+10,player_sprite.direction)
         sword_group.add(sword_sprite)
    
-        
-
-        
-        
-        
+ 
 def display():
     window.fill(0x000000)
     player_group.draw(window)
+    sword_group.draw(window)
 while True:
     display()
     for event in pygame.event.get():
@@ -34,8 +31,9 @@ while True:
           if event.type == pygame.QUIT:
               sys.exit()
     player_sprite.move()
-    sword_sprite.update(5,player_sprite.rect.x)
-    attack()
+    sword_group.update()
+    if len(sword_group)<1:
+        attack()
     
     pygame.display.update() #update the display
     fpsClock.tick(fps) #speed of redraw
