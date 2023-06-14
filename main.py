@@ -1,5 +1,6 @@
 import pygame, sys
 from player import *
+from enemy import *
 pygame.init
 fps = 60
 
@@ -11,8 +12,11 @@ pygame.display.set_caption("Player Testing")
 window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pygame.HWSURFACE)
 player_group=pygame.sprite.Group()
 sword_group=pygame.sprite.Group()
+enemy_group=pygame.sprite.Group()
 player_sprite = Player(100,100)
+enemy_sprite = Enemy(300,300,3,"PlayerL.png","PlayerR.png",30,40)
 player_group.add(player_sprite)
+enemy_group.add(enemy_sprite)
 
 
 
@@ -24,6 +28,7 @@ def attack():
 def display():
     window.fill(0x000000)
     player_group.draw(window)
+    enemy_group.draw(window)
     sword_group.draw(window)
 while True:
     display()
@@ -35,6 +40,8 @@ while True:
     sword_group.update(player_sprite.rect.y+10,player_sprite.rect.x+player_sprite.direction*15)
     if len(sword_group)<1:
         attack()
-
+    enemy_sprite.track(player_sprite.rect.x,player_sprite.rect.y)  
+    
+            
     pygame.display.update() #update the display
     fpsClock.tick(fps) #speed of redraw
