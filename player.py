@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 
 class Player(pygame.sprite.Sprite):
     #Init Sprite  
@@ -71,7 +71,7 @@ class Sword(pygame.sprite.Sprite):
             self.image = self.img_left
             self.mask  = pygame.mask.from_surface(self.image)
             
-    def update(self,y,x):
+    def update(self,y,x,enemy_group):
         self.timer-=1
 
         if self.direction ==1:
@@ -88,3 +88,13 @@ class Sword(pygame.sprite.Sprite):
         self.rect.x += self.sword_move
         if self.timer==0:
             self.kill()
+        self.collision(enemy_group)  
+          
+    def collision(self,enemy):
+        collided_sprites = pygame.sprite.spritecollide(self, enemy, False, collided=pygame.sprite.collide_mask)
+        if len(collided_sprites) >0:
+             self.kill()
+             collided_sprites[0].health_lower(2)
+           
+        #if pygame.sprite.spritecollide(self, enemy, False, ):
+        #    sys.exit()

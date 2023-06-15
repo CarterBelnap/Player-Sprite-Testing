@@ -1,10 +1,11 @@
-import pygame
+import pygame, sys
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self,startX,startY,timer,image_left, image_right,width,height):
+    def __init__(self,startX,startY,timer,image_left, image_right,width,height,health):
         super().__init__()
         self.timer = timer
         self.reset = timer
+        self.health = health
         self.img_left = pygame.image.load(image_left)
         self.img_left =  pygame.transform.scale(self.img_left , (width, height)).convert_alpha()
         self.img_right = pygame.image.load(image_right)
@@ -12,7 +13,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.img_left
         self.mask  = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(startX,startY))
-
+       
     def move(self,x,y):
        self.rect.x += x
        self.rect.y += y
@@ -30,3 +31,15 @@ class Enemy(pygame.sprite.Sprite):
                 self.move(0,-1)
             if self.rect.y < y:
                 self.move(0,1)
+    
+    def update(self,player):
+        self.collision(player)
+        
+    def collision(self,player):
+        if pygame.sprite.spritecollide(self, player, False, collided=pygame.sprite.collide_mask):
+            sys.exit()
+    def health_lower(self,sword_dmg):
+        self.health -= sword_dmg
+        print(self.health)
+        if self.health <= 0:
+            self.kill()

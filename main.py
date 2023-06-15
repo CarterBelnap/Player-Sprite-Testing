@@ -14,7 +14,7 @@ player_group=pygame.sprite.Group()
 sword_group=pygame.sprite.Group()
 enemy_group=pygame.sprite.Group()
 player_sprite = Player(100,100)
-enemy_sprite = Enemy(300,300,3,"PlayerL.png","PlayerR.png",30,40)
+enemy_sprite = Enemy(300,300,3,"PlayerL.png","PlayerR.png",30,40,100)
 player_group.add(player_sprite)
 enemy_group.add(enemy_sprite)
 
@@ -37,11 +37,11 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
     player_sprite.move()
-    sword_group.update(player_sprite.rect.y+10,player_sprite.rect.x+player_sprite.direction*15)
+    sword_group.update(player_sprite.rect.y+10,player_sprite.rect.x+player_sprite.direction*15,enemy_group)
     if len(sword_group)<1:
         attack()
     enemy_sprite.track(player_sprite.rect.x,player_sprite.rect.y)  
-    
+    enemy_group.update(player_group)
             
     pygame.display.update() #update the display
     fpsClock.tick(fps) #speed of redraw
