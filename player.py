@@ -1,11 +1,11 @@
-import pygame, sys
+import pygame
 
 class Player(pygame.sprite.Sprite):
     #Init Sprite  
     dash_timer = 10*30
     direction = 1
     attack = 1
-    def __init__(self,startX,startY):
+    def __init__(self,startX,startY,health):
         super().__init__()
         self.img_left = pygame.image.load("PlayerL.png")
         self.img_left =  pygame.transform.scale(self.img_left , (30, 40)).convert_alpha()
@@ -14,6 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.img_left
         self.mask  = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(startX,startY))
+        self.health = health
     #Basic Movement
     def move(self):
         self.dash_timer -=1
@@ -31,7 +32,8 @@ class Player(pygame.sprite.Sprite):
         if pygame.key.get_mods() & pygame.KMOD_SHIFT and (key_input[pygame.K_a] or key_input[pygame.K_d]) and self.dash_timer<0:
             self.movex *=15
             self.dash_timer = 10*30
-        
+            
+    #Changing masked images from left to right
         if key_input[pygame.K_a]:
             self.direction = -1
             self.image = self.img_right
@@ -49,10 +51,17 @@ class Player(pygame.sprite.Sprite):
     def collide(self):
         self.rect.x -= self.movex
         self.rect.y -= self.movey
-
+        
+    #Lower player health from enemy 
+    def health_lower(self,enemy_dmg):
+        self.health -= enemy_dmg
+        if self.health <= 0:
+            self.kill()  
+                  
 class Sword(pygame.sprite.Sprite):
     timer=20
     sword_move=0
+    #Basic Init
     def __init__(self,startX,startY,direction):
         super().__init__()
         self.img_left = pygame.image.load("SwordL.png")
@@ -71,6 +80,7 @@ class Sword(pygame.sprite.Sprite):
             self.image = self.img_left
             self.mask  = pygame.mask.from_surface(self.image)
             
+    #Sword update method to follow player when stabbing and also moving        
     def update(self,y,x,enemy_group):
         self.timer-=1
 
@@ -88,13 +98,12 @@ class Sword(pygame.sprite.Sprite):
         self.rect.x += self.sword_move
         if self.timer==0:
             self.kill()
-        self.collision(enemy_group)  
-          
+        self.collision(enemy_group) 
+         
+    #SWORD collide with ENEMY      
     def collision(self,enemy):
         collided_sprites = pygame.sprite.spritecollide(self, enemy, False, collided=pygame.sprite.collide_mask)
         if len(collided_sprites) >0:
              self.kill()
              collided_sprites[0].health_lower(2)
-           
-        #if pygame.sprite.spritecollide(self, enemy, False, ):
-        #    sys.exit()
+             

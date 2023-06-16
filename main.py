@@ -13,11 +13,10 @@ window = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pygame.HWSURFACE)
 player_group=pygame.sprite.Group()
 sword_group=pygame.sprite.Group()
 enemy_group=pygame.sprite.Group()
-player_sprite = Player(100,100)
+player_sprite = Player(100,100,100)
 enemy_sprite = Enemy(300,300,3,"PlayerL.png","PlayerR.png",30,40,100)
 player_group.add(player_sprite)
 enemy_group.add(enemy_sprite)
-
 
 
 def attack():
@@ -30,6 +29,8 @@ def display():
     player_group.draw(window)
     enemy_group.draw(window)
     sword_group.draw(window)
+    
+    
 while True:
     display()
     for event in pygame.event.get():

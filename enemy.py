@@ -1,7 +1,7 @@
-import pygame, sys
+import pygame
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self,startX,startY,timer,image_left, image_right,width,height,health):
+    def __init__(self,startX,startY,timer,image_left,image_right,width,height,health):
         super().__init__()
         self.timer = timer
         self.reset = timer
@@ -13,7 +13,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.img_left
         self.mask  = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(startX,startY))
-       
+      
     def move(self,x,y):
        self.rect.x += x
        self.rect.y += y
@@ -22,7 +22,7 @@ class Enemy(pygame.sprite.Sprite):
         self.timer -=1 
         if self.timer <= 0:
             self.timer = self.reset
-        #enemy tracking
+        #ENEMY tracking PLAYER
             if self.rect.x > x:
                 self.move(-1,0) 
             if self.rect.x < x:
@@ -32,14 +32,19 @@ class Enemy(pygame.sprite.Sprite):
             if self.rect.y < y:
                 self.move(0,1)
     
+    #Collision update method
     def update(self,player):
         self.collision(player)
         
+    #ENEMY collide with PLAYER   
     def collision(self,player):
-        if pygame.sprite.spritecollide(self, player, False, collided=pygame.sprite.collide_mask):
-            sys.exit()
+        collided_sprites = pygame.sprite.spritecollide(self, player, False, collided=pygame.sprite.collide_mask)
+        if len(collided_sprites) >0:
+            collided_sprites[0].health_lower(5)
+            #Where we would kill player and lose game
+            
+    #Enemy health lower when hit by sword
     def health_lower(self,sword_dmg):
         self.health -= sword_dmg
-        print(self.health)
         if self.health <= 0:
             self.kill()
